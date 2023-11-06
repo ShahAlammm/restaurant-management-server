@@ -1,0 +1,50 @@
+[
+    {
+      "id": 1,
+      "FoodName": "Spaghetti Bolognese",
+      "FoodImage": "https://i.ibb.co/qrkR22S/appp.webp",
+      "FoodCategory": "Italian",
+      "Price": 12.99,
+      "DetailsButton": "/details/spaghetti"
+    },
+    {
+      "id": 2,
+      "FoodName": "Chicken Caesar Salad",
+      "FoodImage": "https://i.ibb.co/qrkR22S/appp.webp",
+      "FoodCategory": "Salad",
+      "Price": 8.99,
+      "DetailsButton": "/details/caesar-salad"
+    },
+    {
+      "id": 3,
+      "FoodName": "Margherita Pizza",
+      "FoodImage": "https://i.ibb.co/qrkR22S/appp.webp",
+      "FoodCategory": "Pizza",
+      "Price": 14.99,
+      "DetailsButton": "/details/margherita-pizza"
+    },
+    {
+      "id": 4,
+      "FoodName": "Grilled Salmon",
+      "FoodImage": "https://i.ibb.co/qrkR22S/appp.webp",
+      "FoodCategory": "Seafood",
+      "Price": 16.99,
+      "DetailsButton": "/details/grilled-salmon"
+    },
+    {
+      "id": 5,
+      "FoodName": "Chocolate Brownie",
+      "FoodImage": "https://example.com/chocolate-brownie.jpg",
+      "FoodCategory": "Dessert",
+      "Price": 6.99,
+      "DetailsButton": "/details/chocolate-brownie"
+    },
+    {
+      "id": 6,
+      "FoodName": "Vegetarian Stir Fry",
+      "FoodImage": "https://example.com/vegetarian-stir-fry.jpg",
+      "FoodCategory": "Vegetarian",
+      "Price": 10.99,
+      "DetailsButton": "/details/vegetarian-stir-fry"
+    }
+  ]
