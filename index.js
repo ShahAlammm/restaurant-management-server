@@ -28,7 +28,7 @@ async function run() {
 
     const foodCollection = client.db('foodCollection').collection('foodItems');
     const bookingFood = client.db('foodCollection').collection('bookingFood');
-
+    const userCollection = client.db('foodCollection').collection('user');
 
     app.get("/foods", async (req, res) => {
       const cursor = foodCollection.find();
@@ -44,11 +44,26 @@ async function run() {
     });
 
 // Order
-  //   app.post('/order', async (req, res) => {
-  //     const order = req.body;
-  //     const result = await bookingFood.insertOne(order);
-  //     res.send(result);
-  // });
+    app.post('/order', async (req, res) => {
+      const order = req.body;
+      const result = await bookingFood.insertOne(order);
+      res.send(result);
+  });
+
+  // User Order
+  app.get("/order", async (req, res) => {
+    const cursor = bookingFood.find();
+    const result = await cursor.toArray();
+    res.send(result);
+  });
+
+  // Delete user Order
+  app.delete('/order/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await bookingFood.deleteOne(query);
+    res.send(result);
+})
 
   app.post("/foods", async (req, res) => {
     const newProduct = req.body;
@@ -78,21 +93,38 @@ async function run() {
   });
 
 
-  // app.get("/", async (req, res) => {
-  //     const page = parseInt(req.query.page) || 1; // Get the page number from the query parameters
-  //     const pageSize = 9; // Number of items per page
+    // user related apis
+    app.get('/user', async (req, res) => {
+      const cursor = userCollection.find();
+      const users = await cursor.toArray();
+      res.send(users);
+  })
 
-  //     try {
-  //       const foods = await Food.find()
-  //         .skip((page - 1) * pageSize)
-  //         .limit(pageSize);
+  app.post('/user', async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+  });
 
-  //       res.json(foods);
-  //     } catch (error) {
-  //       console.error("Error fetching food items:", error);
-  //       res.status(500).json({ error: "Internal Server Error" });
-  //     }
-  //   });
+  app.patch('/user', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email }
+      const updateDoc = {
+          $set: {
+              lastLoggedAt: user.lastLoggedAt
+          }
+      }
+      const result = await userCollection.updateOne(filter, updateDoc);
+      res.send(result);
+  })
+
+  app.delete('/user/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+  })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
