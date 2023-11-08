@@ -23,7 +23,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
     const foodCollection = client.db('foodCollection').collection('foodItems');
@@ -60,10 +59,21 @@ async function run() {
   // Delete user Order
   app.delete('/order/:id', async (req, res) => {
     const id = req.params.id;
-    const query = { _id: new ObjectId(id) }
-    const result = await bookingFood.deleteOne(query);
-    res.send(result);
-})
+    const query = { _id: new ObjectId(id) };
+
+    try {
+      const result = await bookingFood.deleteOne(query);
+
+      if (result.deletedCount > 0) {
+        res.json({ success: true, message: 'Order deleted successfully' });
+      } else {
+        res.status(404).json({ success: false, message: 'Order not found' });
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
 
   app.post("/foods", async (req, res) => {
     const newProduct = req.body;
@@ -93,38 +103,38 @@ async function run() {
   });
 
 
-    // user related apis
-    app.get('/user', async (req, res) => {
-      const cursor = userCollection.find();
-      const users = await cursor.toArray();
-      res.send(users);
-  })
+  //   // user related apis
+  //   app.get('/user', async (req, res) => {
+  //     const cursor = userCollection.find();
+  //     const users = await cursor.toArray();
+  //     res.send(users);
+  // })
 
-  app.post('/user', async (req, res) => {
-      const user = req.body;
-      console.log(user);
-      const result = await userCollection.insertOne(user);
-      res.send(result);
-  });
+  // app.post('/user', async (req, res) => {
+  //     const user = req.body;
+  //     console.log(user);
+  //     const result = await userCollection.insertOne(user);
+  //     res.send(result);
+  // });
 
-  app.patch('/user', async (req, res) => {
-      const user = req.body;
-      const filter = { email: user.email }
-      const updateDoc = {
-          $set: {
-              lastLoggedAt: user.lastLoggedAt
-          }
-      }
-      const result = await userCollection.updateOne(filter, updateDoc);
-      res.send(result);
-  })
+  // app.patch('/user', async (req, res) => {
+  //     const user = req.body;
+  //     const filter = { email: user.email }
+  //     const updateDoc = {
+  //         $set: {
+  //             lastLoggedAt: user.lastLoggedAt
+  //         }
+  //     }
+  //     const result = await userCollection.updateOne(filter, updateDoc);
+  //     res.send(result);
+  // })
 
-  app.delete('/user/:id', async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await userCollection.deleteOne(query);
-      res.send(result);
-  })
+  // app.delete('/user/:id', async (req, res) => {
+  //     const id = req.params.id;
+  //     const query = { _id: new ObjectId(id) };
+  //     const result = await userCollection.deleteOne(query);
+  //     res.send(result);
+  // })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
