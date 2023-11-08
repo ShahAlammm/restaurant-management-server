@@ -79,7 +79,22 @@ async function run() {
 
 
 
-    app.put("/foods/:id", async (req, res) => {
+    app.get("/userAdd", async (req, res) => {
+      const cursor = userCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+
+    app.post("/userAdd", async (req, res) => {
+      const newProduct = req.body;
+      console.log(newProduct);
+      const result = await userCollection.insertOne(newProduct);
+      res.send(result);
+    });
+
+
+    app.put("/userAdd/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const option = { upsert: true };
@@ -96,20 +111,6 @@ async function run() {
         },
       };
       const result = await userCollection.updateOne(filter, product, option);
-      res.send(result);
-    });
-
-    app.get("/userAdd", async (req, res) => {
-      const cursor = userCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
-    });
-
-
-    app.post("/userAdd", async (req, res) => {
-      const newProduct = req.body;
-      console.log(newProduct);
-      const result = await userCollection.insertOne(newProduct);
       res.send(result);
     });
 
